@@ -1,8 +1,6 @@
-"use client";
-
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router"; // Changed from "next/navigation" to "next/router"
 
 export default function RegisterForm() {
   const [name, setName] = useState("");
@@ -51,7 +49,7 @@ export default function RegisterForm() {
       if (res.ok) {
         const form = e.target;
         form.reset();
-        router.push("/");
+        router.push("/dashboard"); // Redirect to the dashboard page
       } else {
         console.log("User registration failed.");
       }
@@ -91,8 +89,12 @@ export default function RegisterForm() {
             </div>
           )}
 
-          <Link className="text-sm mt-3 text-right" href={"/"}>
-            Already have an account? <span className="underline">Login</span>
+          <Link
+            className="text-sm mt-3 text-right"
+            href="/app/dashboard/page.jsx" // Change the href to the desired dashboard page
+          >
+            Already have an account?{" "}
+            <span className="underline">Login Details</span>
           </Link>
         </form>
       </div>
