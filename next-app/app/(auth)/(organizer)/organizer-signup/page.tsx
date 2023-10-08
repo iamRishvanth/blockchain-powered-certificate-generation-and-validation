@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { PaperEmbeddedWalletSdk } from "@paperxyz/embedded-wallet-service-sdk";
 import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 export default function OrganizerLogin() {
   const sdk = new PaperEmbeddedWalletSdk({
@@ -38,14 +39,20 @@ export default function OrganizerLogin() {
 
   const createAcc = async (event: any) => {
     event.preventDefault();
+    console.log(name);
+    console.log(type);
     if (!email || !name || !type || !accepted) {
       toast.error("Please fill out all the fields.");
-      console.log(name);
-      console.log(type);
-      const res = await sdk.auth.loginWithPaperEmailOtp({ email });
-      console.log("RES:", res);
       return;
     }
+
+    const res = await sdk.auth.loginWithPaperEmailOtp({ email });
+    console.log("RES:", res);
+
+    // if(res ==
+    //   "Logged In, Wallet Initialized") {
+    //     redirect('/organizer')
+    //   }
   };
 
   const handleNameChange = (e: any) => {
