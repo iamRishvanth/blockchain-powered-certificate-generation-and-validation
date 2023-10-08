@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+"use client"
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -41,7 +42,7 @@ export default function OrganizerLogin() {
   } 
 
   const createAcc = async () => {
-    const res = await sdk.auth.loginWithPaperModal();
+    const res = await sdk.auth.loginWithPaperEmailOtp({"email": "dhoni@cricket.bat" });
     console.log("RES:",res)
   }
 
@@ -51,6 +52,7 @@ export default function OrganizerLogin() {
   }
   return (
     <div className="min-h-screen flex items-center justify-center">
+      <button onClick={createAcc}>Register</button>
       <Card className="w-full md:w-[350px]">
         <CardHeader>
           <div className="text-center">
