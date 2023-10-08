@@ -15,10 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/components/ui/use-toast";
 
-const FormSchema1 = z.object({
-  bio: z
+const FormSchema = z.object({
+  Generated_Certificate_URL: z
     .string()
     .min(10, {
       message: "Generated Certificate URL must contain more than 10 letters.",
@@ -29,7 +28,7 @@ const FormSchema1 = z.object({
 });
 
 const FormSchema2 = z.object({
-  bio: z
+  Users_Wallet_Address: z
     .string()
     .min(10, {
       message: "Users Wallet Address must contain more than 10 letters.",
@@ -39,90 +38,85 @@ const FormSchema2 = z.object({
     }),
 });
 
-export function TextareaForm1() {
-  const form = useForm<z.infer<typeof FormSchema1>>({
-    resolver: zodResolver(FormSchema1),
+export function TextareaForm() {
+  const form1 = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
   });
 
-  function onSubmit(data_Certificate_URL: z.infer<typeof FormSchema1>) {
-    console.log(data_Certificate_URL);
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-1/2">
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg">Certificate URL</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Generated Certificate URL"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
-  );
-}
-
-export function TextareaForm2() {
-  const form = useForm<z.infer<typeof FormSchema2>>({
+  const form2 = useForm<z.infer<typeof FormSchema2>>({
     resolver: zodResolver(FormSchema2),
   });
 
-  function onSubmit(data_Wallet_Address: z.infer<typeof FormSchema2>) {
-    console.log(data_Wallet_Address);
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
+  //   function onSubmit1(data: z.infer<typeof FormSchema>) {
+  //     console.log("Certificate URL form data:", data);
+  //   }
+
+  //   function onSubmit2(data: z.infer<typeof FormSchema2>) {
+  //     console.log("User Wallet Address form data:", data);
+  //   }
+
+  function onSubmit(event: any) {
+    event.preventDefault();
+    const formData1 = form1.getValues();
+    const formData2 = form2.getValues();
+    console.log("Combined form data:", formData1, formData2);
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 space-y-6">
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg">User Wallet Address</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Users Wallet Address"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
+    <>
+      <div className="mr-5 ml-5 flex space-x-10 mt-20">
+        <Form {...form1}>
+          <form className="space-y-6 w-1/2">
+            <FormField
+              control={form1.control}
+              name="Generated_Certificate_URL"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg">Certificate URL</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Generated Certificate URL"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+        <Form {...form2}>
+          <form className="w-1/2 space-y-6">
+            <FormField
+              control={form2.control}
+              name="Users_Wallet_Address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg">User Wallet Address</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Users Wallet Address"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </form>
+        </Form>
+      </div>
+      <Button
+        type="button"
+        onClick={onSubmit}
+        className="absolute left-1/2 bottom-20 transform -translate-x-1/2 ml-12"
+      >
+        Issue Certificate to user
+      </Button>
+    </>
   );
 }
