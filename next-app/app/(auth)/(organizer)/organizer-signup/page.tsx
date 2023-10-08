@@ -22,7 +22,33 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 
+import { useEffect, useState } from "react";
+import { PaperEmbeddedWalletSdk } from "@paperxyz/embedded-wallet-service-sdk";
+
 export default function OrganizerLogin() {
+
+  const sdk = new PaperEmbeddedWalletSdk({
+    clientId: "68e67b45-b311-4411-a79f-bb527ff4fe10",
+    chain: "Mumbai",
+    // advancedOptions: {
+    //   recoveryShareManagement: RecoveryShareManagement.AWS_MANAGED
+    // },
+  });
+
+  const test1 = async () => {
+    const user = await sdk.getUser();
+    console.log("UU:",user);
+  } 
+
+  const createAcc = async () => {
+    const res = await sdk.auth.loginWithPaperModal();
+    console.log("RES:",res)
+  }
+
+  const logOut = async () => {
+    const res = await sdk.auth.logout()
+    console.log("RES:",res)
+  }
   return (
     <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full md:w-[350px]">
@@ -82,7 +108,7 @@ export default function OrganizerLogin() {
                   </p>
                 </div>
               </div>
-              <Button variant={"premium"}>Register</Button>
+              <Button onClick={createAcc} variant={"premium"}>Register</Button>
             </div>
           </form>
         </CardContent>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.1",
+    "@paperxyz/embedded-wallet-service-sdk": "^1.2.4",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -40,8 +41,8 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/react": "latest",
+    "@types/node": "20.8.2",
+    "@types/react": "18.2.24",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
     "eslint": "latest",
