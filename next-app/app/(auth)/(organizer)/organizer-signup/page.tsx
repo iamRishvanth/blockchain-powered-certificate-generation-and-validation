@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-"use client"
+"use client";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -14,45 +14,62 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Link from "next/link";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PaperEmbeddedWalletSdk } from "@paperxyz/embedded-wallet-service-sdk";
+import toast from "react-hot-toast";
 
 export default function OrganizerLogin() {
-
   const sdk = new PaperEmbeddedWalletSdk({
     clientId: "68e67b45-b311-4411-a79f-bb527ff4fe10",
     chain: "Mumbai",
-    // advancedOptions: {
-    //   recoveryShareManagement: RecoveryShareManagement.AWS_MANAGED
-    // },
   });
+
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [accepted, setAccepted] = useState(true);
 
   const test1 = async () => {
     const user = await sdk.getUser();
-    console.log("UU:",user);
-  } 
+    console.log("UU:", user);
+  };
 
-  const createAcc = async () => {
-    const res = await sdk.auth.loginWithPaperEmailOtp({"email": "dhoni@cricket.bat" });
-    console.log("RES:",res)
-  }
+  const createAcc = async (event: any) => {
+    event.preventDefault();
+    if (!email || !name || !type || !accepted) {
+      toast.error("Please fill out all the fields.");
+      console.log(name);
+      console.log(type);
+      const res = await sdk.auth.loginWithPaperEmailOtp({ email });
+      console.log("RES:", res);
+      return;
+    }
+  };
+
+  const handleNameChange = (e: any) => {
+    setName(e.target.value);
+  };
+
+  const handleEmailChange = (e: any) => {
+    setEmail(e.target.value);
+  };
+
+  const handleTypeChange = (e: any) => {
+    setType(e.target.value);
+  };
+
+  const handleAcceptanceChange = (e: any) => {
+    setAccepted(e.target.checked);
+  };
 
   const logOut = async () => {
-    const res = await sdk.auth.logout()
-    console.log("RES:",res)
-  }
+    const res = await sdk.auth.logout();
+    console.log("RES:", res);
+  };
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <button onClick={createAcc}>Register</button>
       <Card className="w-full md:w-[350px]">
         <CardHeader>
           <div className="text-center">
@@ -61,43 +78,52 @@ export default function OrganizerLogin() {
           </div>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={createAcc}>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
                 <Label className="mb-2" htmlFor="name">
                   Organization Name
                 </Label>
-                <Input id="name" placeholder="Name of your organization" />
+                <Input
+                  id="name"
+                  placeholder="Name of your organization"
+                  type="text"
+                  value={name}
+                  onChange={handleNameChange}
+                />
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label className="mb-2" htmlFor="email">
                   Organization E-mail
                 </Label>
-                <Input id="email" placeholder="E-mail of your organization" />
+                <Input
+                  id="email"
+                  placeholder="E-mail of your organization"
+                  type="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label className="mb-2" htmlFor="framework">
+                <Label className="mb-2" htmlFor="type">
                   Organization Type
                 </Label>
-                <Select>
-                  <SelectTrigger id="framework">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent position="popper">
-                    <SelectItem value="university/college">
-                      University/college
-                    </SelectItem>
-                    <SelectItem value="private organization">
-                      Private Organization
-                    </SelectItem>
-                    <SelectItem value="government office">
-                      Government office
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+
+                <select
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  id="type"
+                  name="type"
+                  value={type}
+                  onChange={handleTypeChange}
+                >
+                  <option>Select</option>
+                  <option value="College">College</option>
+                  <option value="School">School</option>
+                  <option value="Office">Office</option>
+                </select>
               </div>
               <div className="items-top flex space-x-2">
-                <Checkbox id="terms1" />
+                <Checkbox id="terms1" onChange={handleAcceptanceChange} />
                 <div className="grid gap-1.5 leading-none">
                   <label
                     htmlFor="terms1"
@@ -110,7 +136,9 @@ export default function OrganizerLogin() {
                   </p>
                 </div>
               </div>
-              <Button onClick={createAcc} variant={"premium"}>Register</Button>
+              <Button type="submit" variant={"premium"}>
+                Register
+              </Button>
             </div>
           </form>
         </CardContent>
