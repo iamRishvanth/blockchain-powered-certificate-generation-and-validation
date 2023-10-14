@@ -16,10 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PaperEmbeddedWalletSdk } from "@paperxyz/embedded-wallet-service-sdk";
 import toast from "react-hot-toast";
-import { redirect } from "next/navigation";
 
 export default function OrganizerLogin() {
   const sdk = new PaperEmbeddedWalletSdk({
@@ -32,12 +31,14 @@ export default function OrganizerLogin() {
   const [type, setType] = useState("");
   const [accepted, setAccepted] = useState(true);
 
+  // const router = useRouter();
+
   const test1 = async () => {
     const user = await sdk.getUser();
     console.log("UU:", user);
   };
 
-  const createAcc = async (event: any) => {
+  const createAcc = async (event: React.FormEvent) => {
     event.preventDefault();
     console.log(name);
     console.log(type);
@@ -47,13 +48,26 @@ export default function OrganizerLogin() {
     }
 
     const res = await sdk.auth.loginWithPaperEmailOtp({ email });
+
     console.log("RES:", res);
 
-    // if(res ==
-    //   "Logged In, Wallet Initialized") {
-    //     redirect('/organizer')
-    //   }
+    if (res.user.status === "Logged In, Wallet Initialized") {
+      window.location.href = "http://localhost:3000/organizer";
+      toast.success("Wallet created succesfully.");
+    } else {
+      toast.error("Login failed, wallet is not created.");
+    }
+
+    // return {
+    //   redirect: {
+    //     path: "https://www.google.com",
+    //   },
+    // };
+    //   // } else {
+    //   //   toast.error("Login failed. Please try again.");
+    // };
   };
+  //redirect("/");
 
   const handleNameChange = (e: any) => {
     setName(e.target.value);

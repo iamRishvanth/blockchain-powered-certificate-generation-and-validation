@@ -17,7 +17,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 const FormSchema = z.object({
-  Generated_Certificate_URL: z
+  URL: z
     .string()
     .min(10, {
       message: "Generated Certificate URL must contain more than 10 letters.",
@@ -28,7 +28,7 @@ const FormSchema = z.object({
 });
 
 const FormSchema2 = z.object({
-  Users_Wallet_Address: z
+  Address: z
     .string()
     .min(10, {
       message: "Users Wallet Address must contain more than 10 letters.",
@@ -69,7 +69,7 @@ export function TextareaForm() {
           <form className="space-y-6 w-1/2">
             <FormField
               control={form1.control}
-              name="Generated_Certificate_URL"
+              name="URL"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg">Certificate URL</FormLabel>
@@ -91,7 +91,7 @@ export function TextareaForm() {
           <form className="w-1/2 space-y-6">
             <FormField
               control={form2.control}
-              name="Users_Wallet_Address"
+              name="Address"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg">User Wallet Address</FormLabel>
