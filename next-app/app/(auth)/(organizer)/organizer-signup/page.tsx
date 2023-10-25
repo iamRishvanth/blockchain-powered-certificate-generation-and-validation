@@ -20,6 +20,8 @@ import { useState, useEffect } from "react";
 import { PaperEmbeddedWalletSdk } from "@paperxyz/embedded-wallet-service-sdk";
 import toast from "react-hot-toast";
 
+import router, { useRouter } from "next/router";
+
 export default function OrganizerLogin() {
   const sdk = new PaperEmbeddedWalletSdk({
     clientId: "68e67b45-b311-4411-a79f-bb527ff4fe10",
@@ -47,12 +49,37 @@ export default function OrganizerLogin() {
       return;
     }
 
-    const res = await sdk.auth.loginWithPaperEmailOtp({ email });
+    const res: any = await sdk.auth.loginWithPaperEmailOtp({ email });
 
     console.log("RES:", res);
 
+    console.log(await res.user.wallet.getEthersJsSigner());
+
+    // const result = await signIn("credentials", {
+    //   usename: name,
+    //   useremail: email,
+    //   usertype: type,
+    //   address: res,
+    //   redirect: true,
+    //   callbackUrl: "/organizer"
+    // });
+
     if (res.user.status === "Logged In, Wallet Initialized") {
+      const walletAddress = res.user.walletAddress;
+      const signer = await res.user.wallet.getEthersJsSigner();
+
+      localStorage.setItem("name", name);
+      localStorage.setItem("type", type);
+      localStorage.setItem("email", email);
+      localStorage.setItem("loginResult", JSON.stringify(res.walletAddress));
+      localStorage.setItem("walletAddress", walletAddress);
+      localStorage.setItem("signer", JSON.stringify(signer));
+
       window.location.href = "http://localhost:3000/organizer";
+      // router.push({
+      //   pathname: "/",
+      //   query: { name, type, email },
+      // });
       toast.success("Wallet created succesfully.");
     } else {
       toast.error("Login failed, wallet is not created.");
