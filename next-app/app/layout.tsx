@@ -1,8 +1,10 @@
+
 import { ThemeProvider } from "@/components/theme-provider";
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import ToasterContext from "./context/ToasterContext";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,15 +21,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
           <ToasterContext />
-          {children}
-        </ThemeProvider>
+            {children}
+          </ThemeProvider>
       </body>
     </html>
   );

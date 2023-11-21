@@ -107,6 +107,7 @@
 // export default Organizer;
 
 import React, { useEffect, useState } from "react";
+import {ChainId, ThirdwebProvider, useStorageUpload} from "@thirdweb-dev/react";
 
 export function getLocalStorageData() {
   const name = localStorage.getItem("name") || "";
@@ -195,7 +196,21 @@ function Organizer() {
     return properties;
   };
 
+  const [file, setFile] = useState<any>(null);
+  const { mutateAsync: upload} = useStorageUpload();
+  const uploadToIpfs = async () => {
+    const uploadUrl = await upload({
+      data: [file],
+      options: {
+        uploadWithGatewayUrl: true,
+        uploadWithoutDirectory: true
+      }
+    })
+  console.log("Uploaded File URL:",uploadUrl);
+  }
+
   return (
+    <ThirdwebProvider clientId="b457476f39a9d2cf1f6a4ef793d0c12a">
     <div>
       <h1>Welcome to the Organizer Dashboard, {name}!</h1>
       <p>Email: {email}</p>
@@ -219,7 +234,16 @@ function Organizer() {
           {renderPrototypeProperties(Object.getPrototypeOf(signer))}
         </div>
       )}
+      <div>
+        <input type="file" onChange = {(e) => {
+          if(e.target.files) {
+            setFile(e.target.files[0]);
+          }
+        }}/>
+        <button onClick={uploadToIpfs}>Upload</button>
+      </div>
     </div>
+    </ThirdwebProvider>
   );
 }
 
